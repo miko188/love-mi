@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кешірші жанм ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1a0b2e, #2d1b3e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Arial', system-ui, sans-serif;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Жүректер фоны - анимация */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.6;
+            animation: floatHeart 8s infinite ease-in-out;
+            color: #ff7b9c;
+            text-shadow: 0 0 15px #ff4d7a;
+            will-change: transform;
+        }
+        @keyframes floatHeart {
+            0% { transform: translateY(0px) scale(0.8) rotate(0deg); opacity: 0.3; }
+            25% { transform: translateY(-30px) scale(1.2) rotate(8deg); opacity: 0.8; }
+            50% { transform: translateY(-70px) scale(1) rotate(-5deg); opacity: 0.9; }
+            75% { transform: translateY(-40px) scale(1.1) rotate(5deg); opacity: 0.7; }
+            100% { transform: translateY(0px) scale(0.9) rotate(0deg); opacity: 0.3; }
+        }
+        .heart:nth-child(odd) { animation-duration: 11s; }
+        .heart:nth-child(3n) { animation-duration: 14s; font-size: 2.2rem; }
+        .heart:nth-child(5n+2) { animation-duration: 9s; font-size: 1.4rem; }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 245, 250, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 60px 60px 40px 40px;
+            padding: 40px 30px 50px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255, 200, 230, 0.15);
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 150, 200, 0.2);
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #ffe4f0;
+            text-shadow: 0 4px 20px #ff89b0;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .sub {
+            color: #fbc8d9;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            border-bottom: 1px dashed #ffb3cc;
+            padding-bottom: 14px;
+        }
+        .message-box {
+            background: rgba(10, 5, 15, 0.5);
+            border-radius: 100px;
+            padding: 18px 20px;
+            margin: 20px 0 30px;
+            border: 1px solid #ff99bb;
+            box-shadow: inset 0 0 15px #ff3f7a30;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #question {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 12px #ff5f9e;
+            transition: 0.2s;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin: 25px 0 15px;
+            position: relative;
+        }
+        .btn {
+            border: none;
+            background: #ffd9e8;
+            padding: 16px 40px;
+            border-radius: 80px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2b1430;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #9f6b82, 0 10px 25px #00000055;
+            transition: all 0.08s ease;
+            min-width: 130px;
+            letter-spacing: 1px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #9f6b82;
+        }
+        .btn-yes {
+            background: #b5f0c5;
+            box-shadow: 0 8px 0 #47945e, 0 10px 25px #00000055;
+            color: #143020;
+        }
+        .btn-yes:active:not(:disabled) {
+            box-shadow: 0 2px 0 #47945e;
+        }
+        .btn-no {
+            background: #fbc0cb;
+            box-shadow: 0 8px 0 #a55b6e, 0 10px 25px #00000055;
+            color: #3d1d26;
+            transition: all 0.15s ease;
+        }
+        .btn-no:active:not(:disabled) {
+            box-shadow: 0 2px 0 #a55b6e;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 4px 0 #6b4b5a;
+        }
+        #counterDisplay {
+            font-size: 1.2rem;
+            color: #ffcfdf;
+            background: #1f122b80;
+            padding: 10px 22px;
+            border-radius: 60px;
+            display: inline-block;
+            margin: 18px 0 10px;
+            border: 1px solid #ff9bb9;
+            backdrop-filter: blur(4px);
+        }
+        .footer-note {
+            font-size: 1rem;
+            color: #ccb0c9;
+            margin-top: 20px;
+            opacity: 0.8;
+            font-style: italic;
+            background: #220f2b60;
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .reset-area {
+            margin-top: 20px;
+        }
+        #resetBtn {
+            background: rgba(255, 200, 220, 0.15);
+            border: 1px solid #ff99bb;
+            color: #f0c8d8;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+        }
+        #resetBtn:hover {
+            background: rgba(255, 200, 220, 0.3);
+            color: #ffe0ec;
+        }
+        @media (max-width: 480px) {
+            .card { padding: 30px 16px 35px; }
+            h1 { font-size: 2.2rem; }
+            #question { font-size: 1.7rem; }
+            .btn { font-size: 1.5rem; padding: 14px 28px; min-width: 110px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Фондық жүректер -->
+<div class="hearts-bg" id="heartsContainer"></div>
+
+<div class="card">
+    <h1>💔 кешірші</h1>
+    <div class="sub">жанм, мұқият ойла...</div>
+
+    <div class="message-box">
+        <div id="question">Кешіресің бе?</div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-yes" id="yesBtn">Иә</button>
+        <button class="btn btn-no" id="noBtn">Жоқ</button>
+    </div>
+
+    <div id="counterDisplay">❤️ 0 рет бастың</div>
+    <div class="footer-note" id="statusMessage">💕 менің жүрегім</div>
+    
+    <div class="reset-area">
+        <button id="resetBtn">🔄 Қайта бастау</button>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // --- Элементтер ---
+        const questionEl = document.getElementById('question');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const statusMessage = document.getElementById('statusMessage');
+        const resetBtn = document.getElementById('resetBtn');
+        const heartsContainer = document.getElementById('heartsContainer');
+
+        // --- Күй ---
+        let noCount = 0;             // "жоқ" басу саны (шек жоқ!)
+        let isFinalState = false;    // финалдық күй (кешірмеді / кешірді)
+        let gameOver = false;        // ойын аяқталды ма
+
+        // --- Өлшемдер ---
+        const BASE_YES = 1.8;
+        const BASE_NO = 1.8;
+        const STEP = 0.22;
+
+        // --- Фондық жүректерді генерациялау ---
+        function createHearts() {
+            heartsContainer.innerHTML = '';
+            const heartSymbols = ['❤️', '💕', '💖', '💗', '♥️', '❤️‍🔥', '💝'];
+            for (let i = 0; i < 35; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = 1.2 + Math.random() * 2.2;
+                heart.style.left = x + '%';
+                heart.style.top = y + '%';
+                heart.style.fontSize = size + 'rem';
+                heart.style.animationDelay = (Math.random() * 6) + 's';
+                heart.style.animationDuration = (8 + Math.random() * 10) + 's';
+                heart.style.opacity = 0.3 + Math.random() * 0.5;
+                heartsContainer.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // --- Логика өлшемдерді жаңарту ---
+        function updateSizes() {
+            if (gameOver || isFinalState) return;
+
+            // Иә үлкейеді, Жоқ кішірейеді (noCount шексіз)
+            const yesSize = BASE_YES + (noCount * STEP);
+            let noSize = BASE_NO - (noCount * STEP * 0.9);
+            if (noSize < 0.4) noSize = 0.4;
+
+            yesBtn.style.fontSize = yesSize + 'rem';
+            noBtn.style.fontSize = noSize + 'rem';
+
+            // Иә түймесінің өлшемі
+            yesBtn.style.padding = (16 + noCount * 1.8) + 'px ' + (40 + noCount * 2.5) + 'px';
+            yesBtn.style.minWidth = (130 + noCount * 6) + 'px';
+
+            // Жоқ түймесі кішірейеді
+            const noPad = Math.max(4, 16 - noCount * 0.8);
+            const noMinW = Math.max(60, 130 - noCount * 4.5);
+            noBtn.style.padding = noPad + 'px ' + (40 - noCount * 1.8) + 'px';
+            noBtn.style.minWidth = noMinW + 'px';
+
+            // Түстерді өзгерту
+            const intensity = Math.min(1, noCount / 8);
+            const r = 181 + 74 * intensity;
+            const g = 240 - 40 * intensity;
+            const b = 197 - 30 * intensity;
+            yesBtn.style.background = `rgb(${r}, ${g}, ${b})`;
+
+            const noR = 251 - 25 * intensity;
+            const noG = 192 - 25 * intensity;
+            const noB = 203 - 25 * intensity;
+            noBtn.style.background = `rgb(${noR}, ${noG}, ${noB})`;
+
+            // Егер noCount өте үлкен болса, жоқ түймесін қосымша әжімдеу
+            if (noCount > 15) {
+                noBtn.style.transform = 'scale(0.85)';
+                noBtn.style.opacity = '0.5';
+            } else {
+                noBtn.style.transform = 'scale(1)';
+                noBtn.style.opacity = '1';
+            }
+        }
+
+        // --- Сөздерді жаңарту (әр басуда) ---
+        function updatePhrase() {
+            let text = 'Кешіресің бе?';
+            if (noCount >= 5 && noCount < 12) {
+                const phrases = [
+                    'Кешірші жанм 😢',
+                    'жанм, кешіресің бе?',
+                    'кешірші, менің жаным 💔',
+                    'кешірші, жанм...',
+                    'өтінемін, кешір!',
+                    'сені сүйемін, кешірші 💕',
+                    'тағы да кешірші...'
+                ];
+                const idx = (noCount - 5) % phrases.length;
+                text = phrases[idx];
+            } else if (noCount >= 12 && noCount < 20) {
+                const phrases2 = [
+                    'мені кешіре алмайсың ба? 😢',
+                    'жанм, неге кешірмейсің?',
+                    'кешірші, мен саған ғашықпын ❤️',
+                    'тағы да кешірші, жанм...',
+                    'менің жүрегім сынды 💔',
+                    'кешірші, менің жаным!!!'
+                ];
+                const idx = (noCount - 12) % phrases2.length;
+                text = phrases2[idx];
+            } else if (noCount >= 20) {
+                text = 'Мені кешірмейсің бе, жанм? 😭💔';
+                // Финалдық күйге өту (кешірмеді)
+                if (!gameOver && !isFinalState) {
+                    isFinalState = true;
+                    gameOver = true;
+                    // Түймелерді бұғаттау
+                    yesBtn.disabled = true;
+                    noBtn.disabled = true;
+                    yesBtn.style.opacity = '0.5';
+                    noBtn.style.opacity = '0.5';
+                    yesBtn.style.cursor = 'default';
+                    noBtn.style.cursor = 'default';
+                    statusMessage.innerText = '💔 сен кешірмедің... менің жүрегім мәңгі сынды';
+                    document.querySelector('.card').style.background = 'rgba(40, 15, 25, 0.8)';
+                    questionEl.style.color = '#ffb0c0';
+                    questionEl.style.textShadow = '0 0 30px #ff3f7a';
+                    counterDisplay.innerText = `💔 ${noCount} рет «жоқ» — кешірмедің`;
+                    // Қосымша жүректерді қарайту
+                    document.querySelectorAll('.heart').forEach(h => h.style.opacity = '0.2');
+                }
+            }
+            if (!gameOver) {
+                questionEl.innerText = text;
+            }
+        }
+
+        // --- "Жоқ" басылғанда ---
+        function handleNo() {
+            if (gameOver) {
+                statusMessage.innerText = '😭 мені кешірмейсіңба...';
+                return;
+            }
+
+            noCount++;
+            counterDisplay.innerText = `❤️ ${noCount} рет бастың`;
+
+            // Егер 20-дан асса, финал
+            if (noCount >= 20) {
+                // Финалдық күй
+                isFinalState = true;
+                gameOver = true;
+                yesBtn.disabled = true;
+                noBtn.disabled = true;
+                yesBtn.style.opacity = '0.5';
+                noBtn.style.opacity = '0.5';
+                yesBtn.style.cursor = 'default';
+                noBtn.style.cursor = 'default';
+                questionEl.innerText = 'Мені кешірмейсің бе, жанм? 😭💔';
+                statusMessage.innerText = '💔 сен кешірмедің... менің жүрегім мәңгі сынды';
+                document.querySelector('.card').style.background = 'rgba(40, 15, 25, 0.8)';
+                questionEl.style.color = '#ffb0c0';
+                questionEl.style.textShadow = '0 0 30px #ff3f7a';
+                counterDisplay.innerText = `💔 ${noCount} рет «жоқ» — кешірмедің`;
+                document.querySelectorAll('.heart').forEach(h => h.style.opacity = '0.2');
+                return;
+            }
+
+            // Әйтпесе, өлшемдер мен сөздерді жаңарту
+            updateSizes();
+            updatePhrase();
+
+            // Статус меседжі
+            if (noCount < 5) {
+                statusMessage.innerText = '💕 жанм, кешірші...';
+            } else if (noCount < 12) {
+                statusMessage.innerText = '😢 менің жүрегім ауырады...';
+            } else if (noCount < 20) {
+                statusMessage.innerText = '💔 сенің жауабың мені қатты ренжітті...';
+            }
+        }
+
+        // --- "Иә" басылғанда ---
+        function handleYes() {
+            if (gameOver) {
+                statusMessage.innerText = '😢 кешіре алмайсың...';
+                return;
+            }
+
+            // Иә -> кешірді!
+            gameOver = true;
+            isFinalState = true;
+            questionEl.innerText = 'Кешірдің! 😍 мен сені жақсы көремін!';
+            statusMessage.innerText = '❤️ Рахмет, жанм! ❤️';
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+            yesBtn.style.opacity = '0.7';
+            noBtn.style.opacity = '0.7';
+            yesBtn.style.cursor = 'default';
+            noBtn.style.cursor = 'default';
+            document.querySelector('.card').style.background = 'rgba(30, 50, 35, 0.6)';
+            counterDisplay.innerText = `💕 Кешірдің! ${noCount} рет «жоқ» дедің, бірақ мен саған ризамын.`;
+            // жүректерді жарқырату
+            document.querySelectorAll('.heart').forEach(h => {
+                h.style.opacity = '0.9';
+                h.style.animationDuration = '4s';
+            });
+        }
+
+        // --- Қайта бастау ---
+        function resetGame() {
+            // Күйді қалпына келтіру
+            noCount = 0;
+            gameOver = false;
+            isFinalState = false;
+
+            // Түймелер
+            yesBtn.disabled = false;
+            noBtn.disabled = false;
+            yesBtn.style.opacity = '1';
+            noBtn.style.opacity = '1';
+            yesBtn.style.cursor = 'pointer';
+            noBtn.style.cursor = 'pointer';
+            yesBtn.style.transform = 'scale(1)';
+            noBtn.style.transform = 'scale(1)';
+
+            // Мәтіндер
+            questionEl.innerText = 'Кешіресің бе?';
+            counterDisplay.innerText = '❤️ 0 рет бастың';
+            statusMessage.innerText = '💕 менің жүрегім';
+            document.querySelector('.card').style.background = 'rgba(255, 245, 250, 0.08)';
+            questionEl.style.color = '#ffffff';
+            questionEl.style.textShadow = '0 0 12px #ff5f9e';
+
+            // Өлшемдерді бастапқыға келтіру
+            yesBtn.style.fontSize = BASE_YES + 'rem';
+            noBtn.style.fontSize = BASE_NO + 'rem';
+            yesBtn.style.padding = '16px 40px';
+            yesBtn.style.minWidth = '130px';
+            noBtn.style.padding = '16px 40px';
+            noBtn.style.minWidth = '130px';
+            yesBtn.style.background = '#b5f0c5';
+            noBtn.style.background = '#fbc0cb';
+
+            // Жүректерді қайта жандандыру
+            document.querySelectorAll('.heart').forEach(h => {
+                h.style.opacity = '0.3';
+                h.style.animationDuration = (8 + Math.random() * 10) + 's';
+            });
+            // Жүректерді қайта жасау
+            createHearts();
+        }
+
+        // --- Тіркеу ---
+        noBtn.addEventListener('click', handleNo);
+        yesBtn.addEventListener('click', handleYes);
+        resetBtn.addEventListener('click', resetGame);
+
+        // Бастапқы орнату
+        resetGame();
+
+        // Қосымша: егер 10 реттен асса, бірақ 20-ға жетпесе, анимация
+        // Бірақ бізде updatePhrase ішінде бар
+    })();
+</script>
+</body>
+</html>
